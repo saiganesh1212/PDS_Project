@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Patient Details</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+     <!-- Your custom styles (optional) -->
+    <style>
+        /* Add your custom styles here */
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Live HeartBeat Monitor</a>
+        
+        <!-- Hamburger Icon for mobile -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+           
+            
+            <!-- Logout Button -->
+            <form class="form-inline my-2 my-lg-0" action="/logout" method="post">
+                <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button>
+            </form>
+        </div>
+    </nav>
+
+<div class="container">
+    <h1>Patient Details</h1>
+ 
+    <!-- Patient Details Table -->
+    <table class="table mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Emergency Contact</th>
+                <th scope="col">Edit Profile</th>
+                <th scope="col">ViewStats</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{user.name}}</td>
+                <td>{{user.age}}</td>
+                <td>{{user.gender}}</td>
+                <td>{{user.emergencycontactno}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="sendUserId('{{user.id}}',1)">
+                        Edit
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="sendUserId('{{user.id}}',2)">
+                    View
+                    </button>
+                </td>
+            {% endfor %}
+                <!-- Add more cells with patient details -->
+            </tr>
+            <!-- Add more rows for additional patients -->
+        </tbody>
+    </table>
+</div>
+<!-- Bootstrap and jQuery JS scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    
+    function sendUserId(userid,toggle) {
+        // Use AJAX to send the ID to View Profile
+        if (toggle==1){
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/profile', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Handle the response from the server if needed
+                    document.body.innerHTML=this.responseText;
+                }
+            };
+            xhr.send(JSON.stringify({ id: userid }));
+        }
+        //Use AJAX to send the ID to Visualization
+        if(toggle==2){
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/visualize', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Handle the response from the server if needed
+                    const responseHtml = this.responseText;
+const newWindow=window.open("", "", "_blank"); // Open a new blank window
+const newWindowDoc=newWindow.document;
+newWindowDoc.write(responseHtml);
+
+// setInterval(() => {
+//   if (isClosed) return;
+//   isClosed = newWindow.closed;
+//   if (isClosed) {
+//     var x1=new XMLHttpRequest();
+//                 x1.open('DELETE','/deleteFile',true);
+//                 x1.setRequestHeader('Content-Type', 'application/json');
+//                 x1.onload=function(){
+//                     if(x1.status==200){
+//                         console.log('File Deleted');
+//                     }
+//                 }
+//     // Do your logic here if the window is closed
+//   }
+// }, 1000); 
+                }
+
+
+            };
+            xhr.send(JSON.stringify({ id: userid }));
+        }
+    }
+
+</script>
+</body>
+</html>
