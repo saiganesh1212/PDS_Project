@@ -3,20 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>User Login</title>
 </head>
+<style>
+    
+    h1 { text-align: center;
+        color:black;
+        text-transform: uppercase;
+    }
+    body {
+        background-image: url('{{ url_for('static', filename='login.jpg') }}');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+    form {
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .form-group {
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold; /* Make the label text bold */
+        }
+    
+</style>
 <body>
-    <h1>User Login</h1>
-    <form method="post" action="/login">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required><br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" required><br>
-        <button type="submit">Login</button>
-    </form>
-    {% if hasError%}
-        <p style="color:red">Incorrect password. Please enter correct password</p>
-    {% endif %}
-    <p>Don't have an account? <a href="/register">Register</a></p>
+    <div class="container mt-5">
+        <h1>User Login</h1>
+        <form method="post" action="/login" class="mx-auto col-md-6">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" class="form-control" required>
+                <label for="password">Password:</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <div class="text-center mt-3">
+            {% if hasError %}
+                <p style="color:red">Incorrect password. Please enter the correct password.</p>
+            {% endif %}
+        </div>
+        <p class="text-center mt-3">Don't have an account? <a href="/register">Register</a></p>
+    </div>
 </body>
 </html>

@@ -1,3 +1,4 @@
+from flask import Flask, render_template
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
@@ -11,7 +12,14 @@ import plotly.io as pio
 import os
 
 
-app = Flask(__name__)
+# app = Flask(__name__)
+
+app = Flask(__name__, static_url_path='/static')
+
+
+def index():
+    return render_template('login.html'), render_template('register.html')
+
 
 # random secret generated from os module in python for session management
 
